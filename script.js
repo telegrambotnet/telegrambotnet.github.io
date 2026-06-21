@@ -18,11 +18,9 @@ const CONFIG = {
 
   // соцсети. icon — один из ключей объекта ICONS ниже
   socials: [
-    { name: "Discord",   url: "#", icon: "chat" },
-    { name: "Telegram",  url: "#", icon: "paperplane" },
-    { name: "Instagram", url: "#", icon: "camera" },
-    { name: "GitHub",    url: "#", icon: "code" },
-    { name: "X",         url: "#", icon: "spark" }
+    { name: "Telegram",  url: "https://t.me/fuckyourselfharm", icon: "paperplane" },
+    { name: "GitHub",    url: "https://github.com/telegrambotnet", icon: "code" },
+    { name: "SoundCloud",         url: "https://soundcloud.com/fr3v3r", icon: "spark" }
   ],
 
   music: {
