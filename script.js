@@ -4,6 +4,7 @@
 const CONFIG = {
   profile: {
     username: "trendsetter",
+    discordId: "1423390379587408015",
     tagline: "ебу всех.",
     avatar: "avatar.jpg",
     status: { show: true, color: "#5cff9d" }
@@ -414,6 +415,110 @@ function setPlayingUI(isPlaying) {
   $('#iconPlay').style.display = isPlaying ? 'none' : 'block';
   $('#iconPause').style.display = isPlaying ? 'block' : 'none';
 }
+
+let lanyardWs = null;
+
+function initLanyard() {
+  if (!CONFIG.profile.discordId || CONFIG.profile.discordId === "ТВОЙ_ДИСКОРД_ID_ЗДЕСЬ") return;
+
+  lanyardWs = new WebSocket("wss://api.lanyard.rest/socket");
+
+  lanyardWs.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    
+    // Хендшейк и подписка на ID
+    if (msg.op === 1) {
+      setInterval(() => {
+        if (lanyardWs.readyState === WebSocket.OPEN) {
+          lanyardWs.send(JSON.stringify({ op: 3 }));
+        }
+      }, msg.d.heartbeat_interval);
+
+      lanyardWs.send(JSON.stringify({
+        op: 2,
+        d: { subscribe_to_id: CONFIG.profile.discordId }
+      }));
+    } 
+    // Получение данных состояния
+    else if (msg.op === 0 && (msg.t === "INIT_STATE" || msg.t === "PRESENCE_UPDATE")) {
+      updateDiscordPresence(msg.d);
+    }
+  };
+
+  lanyardWs.onclose = () => {
+    setTimeout(initLanyard, 5000); // Авто-реконнект при обрыве
+  };
+}
+
+function updateDiscordPresence(data) {
+  const { discord_user, discord_status, activities } = data;
+
+  if (!discord_user) return;
+
+  // 1. Обновление никнейма (берет Global Name или Username)
+  $('#username').textContent = discord_user.global_name || discord_user.username;
+
+  // 2. Живой аватар из Discord
+  if (discord_user.avatar) {
+    const isGif = discord_user.avatar.startsWith('a_');
+    $('#avatar').src = `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.${isGif ? 'gif' : 'png'}?size=256`;
+  } else {
+    // Если аватара нет — ставим дефолтный от Дискорда
+    const defaultAvatarIdx = discord_user.discriminator === "0" 
+      ? Number(BigInt(discord_user.id) >> 22n) % 6 
+      : parseInt(discord_user.discriminator) % 5;
+    $('#avatar').src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIdx}.png`;
+  }
+
+  // 3. Украшение аватара (Avatar Decoration)
+  const deco = discord_user.avatar_decoration_data;
+  const decoEl = $('#avatarDecoration');
+  if (deco && deco.asset) {
+    decoEl.src = `https://cdn.discordapp.com/avatar-decorations/${deco.asset}.png`;
+    decoEl.style.display = 'block';
+  } else {
+    decoEl.style.display = 'none';
+  }
+
+  // 4. Статус активности (Цвет точки)
+  const statusColors = {
+    online: "#23a55a",
+    idle: "#f0b232",
+    dnd: "#f23f43",
+    offline: "#80848e"
+  };
+  const currentStatusColor = statusColors[discord_status] || statusColors.offline;
+  $('#statusDot').style.background = currentStatusColor;
+  document.documentElement.style.setProperty('--status-color', currentStatusColor);
+
+  // 5. Парсинг активности (Игры, Spotify или кастомный статус)
+  const activityEl = $('#discordActivity');
+  let activityText = "";
+
+  const gameActivity = activities.find(a => a.type !== 4);
+  const customStatus = activities.find(a => a.type === 4);
+
+  if (gameActivity) {
+    const verb = gameActivity.type === 2 ? "Слушает" : gameActivity.type === 3 ? "Смотрит" : "Играет в";
+    activityText = `${verb} <b>${gameActivity.name}</b>`;
+    if (gameActivity.details) activityText += ` — ${gameActivity.details}`;
+  } else if (customStatus) {
+    const emojiHtml = customStatus.emoji?.id 
+      ? `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'png'}" class="activity-emoji">`
+      : (customStatus.emoji?.name || "");
+    activityText = `${emojiHtml}<span>${customStatus.state || ''}</span>`;
+  }
+
+  if (activityText) {
+    activityEl.innerHTML = activityText;
+    activityEl.style.display = 'inline-flex';
+  } else {
+    activityEl.style.display = 'none';
+  }
+}
+
+// Вызываем инициализацию Lanyard в самом конце скрипта или внутри renderProfile
+initLanyard();
 
 /* =========================================================================
    ИНИЦИАЛИЗАЦИЯ

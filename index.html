@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>trendsetter</title>
-<meta name="description" content="bio page">
+<title>trendsetter ebet</title>
 
+<meta name="description" content="TRENDSETTER">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,12 +40,15 @@
 
       <div class="card__content">
         <div class="avatar-wrap">
-          <img id="avatar" class="avatar" alt="avatar" />
-          <span id="statusDot" class="status-dot" title="online"></span>
-        </div>
+  <img id="avatarDecoration" class="avatar-decoration" alt="" style="display: none;" />
+  <img id="avatar" class="avatar" alt="avatar" />
+  <span id="statusDot" class="status-dot" title="online"></span>
+</div>
 
-        <h1 id="username" class="username"></h1>
-        <p id="tagline" class="tagline"></p>
+<!-- Находим блок с username и вставляем под него discordActivity: -->
+<h1 id="username" class="username"></h1>
+<div id="discordActivity" class="discord-activity" style="display: none;"></div>
+<p id="tagline" class="tagline"></p>
 
         <div id="badges" class="badges"></div>
 

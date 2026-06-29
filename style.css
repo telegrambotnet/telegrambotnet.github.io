@@ -394,3 +394,52 @@ a:focus-visible, button:focus-visible, input[type="range"]:focus-visible{
   opacity: 0.3;
   pointer-events: none;
 }
+
+/* Размеры обертки для правильного позиционирования декорации */
+.avatar-wrap {
+  position: relative;
+  margin-bottom: 16px;
+  width: 88px;
+  height: 88px;
+}
+
+/* Стилизация украшения аватара */
+.avatar-decoration {
+  position: absolute;
+  top: -11%;
+  left: -11%;
+  width: 122%;
+  height: 122%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Блок отображения игровой активности/статуса */
+.discord-activity {
+  font-size: 11px;
+  color: var(--dim);
+  margin: -2px 0 14px 0;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+  letter-spacing: 0.01em;
+}
+
+.discord-activity b {
+  color: var(--mist);
+  font-weight: 600;
+}
+
+/* Кастомные эмодзи в статусе */
+.activity-emoji {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+}
