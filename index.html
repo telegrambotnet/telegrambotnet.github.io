@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>trendsetter</title>
+<meta name="description" content="bio page">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gate">
+  <div id="gateText" class="gate__text" data-final="ENTER">ENTER</div>
+  <div class="gate__hint">я трахал твою мамочку</div>
+</div>
+
+<div id="app" class="app" aria-hidden="true">
+
+  <video id="bgVideo" autoplay loop muted playsinline>
+    <source src="bg.mp4" type="video/mp4">
+  </video>
+  
+  <canvas id="particles"></canvas>
+
+  <div id="cursorRing" class="cursor cursor--ring"></div>
+  <div id="cursorDot" class="cursor cursor--dot"></div>
+
+  <main class="card-outer">
+  <div class="card" id="card">
+    <div class="card__holo" id="cardHolo"></div>
+
+    <div class="card__inner">
+      <canvas id="waveform" class="card__visualizer"></canvas>
+
+      <div class="card__content">
+        <div class="avatar-wrap">
+          <img id="avatar" class="avatar" alt="avatar" />
+          <span id="statusDot" class="status-dot" title="online"></span>
+        </div>
+
+        <h1 id="username" class="username"></h1>
+        <p id="tagline" class="tagline"></p>
+
+        <div id="badges" class="badges"></div>
+
+        <div id="socials" class="socials"></div>
+
+        <div class="player">
+          <button id="playBtn" class="player__btn" aria-label="play/pause">
+            <svg id="iconPlay" viewBox="0 0 24 24" class="icon"><path d="M7 5l12 7-12 7z"/></svg>
+            <svg id="iconPause" viewBox="0 0 24 24" class="icon" style="display:none"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+          </button>
+
+          <div class="player__meta">
+            <div class="player__label">NOW PLAYING</div>
+            <div class="player__track-wrap">
+              <div id="trackText" class="player__track">— add a song in script.js —</div>
+            </div>
+            <input type="range" id="volumeSlider" class="player__volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <audio id="bgAudio" loop preload="none" crossorigin="anonymous"></audio>
+
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
